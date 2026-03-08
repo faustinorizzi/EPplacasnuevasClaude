@@ -1,4 +1,7 @@
+import re
 from urllib.parse import urlparse
+
+MAX_DESCRIPTION_CHARS = 150
 
 
 def infer_section_from_url(url: str) -> str:
@@ -51,12 +54,44 @@ def display_section_label(url: str) -> str:
     return labels.get(first, "GENERAL")
 
 
+def has_numeric_pattern(title: str) -> bool:
+    """Detecta marcadores, fechas o números destacables en el título."""
+    patterns = [
+        r'\b\d+\s*[-–a]\s*\d+\b',   # marcadores: 3-1, 2-0, 76-72
+        r'\bfecha\s+\d+\b',           # fecha 10, fecha 5
+        r'\bjornada\s+\d+\b',         # jornada 3
+        r'\bfecha\b.*\d+',            # fecha + número
+        r'\b\d{1,2}:\d{2}\b',         # horarios tipo 20:00
+    ]
+    title_lower = title.lower()
+    return any(re.search(p, title_lower) for p in patterns)
+
+
+def choose_deportes_variant(title: str) -> str:
+    """Elige entre deportes_a (highlight) y deportes_b (panel sobrio)."""
+    title = (title or "").strip()
+    if ":" in title:
+        left = title.split(":")[0].strip()
+        if left:
+            return "deportes_a"
+    if has_numeric_pattern(title):
+        return "deportes_a"
+    return "deportes_b"
+
+
+def show_description(description: str) -> bool:
+    """Muestra descripción solo si no supera el máximo de caracteres."""
+    if not description:
+        return False
+    return len(description.strip()) <= MAX_DESCRIPTION_CHARS
+
+
 def choose_family(section: str, title: str, description: str) -> str:
     title = (title or "").strip()
     description = (description or "").strip().lower()
 
     if section == "deportes":
-        return "deportes"
+        return choose_deportes_variant(title)
 
     if section == "policiales":
         return "policiales"
