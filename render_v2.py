@@ -338,7 +338,7 @@ def build_highlight_html(raw_title: str) -> str:
         r'\b\d+\s*[-–a]\s*\d+\b',
         r'\bfecha\s+\d+\b',
         r'\bjornada\s+\d+\b',
-        r'\b\d{{1,2}}:\d{{2}}\b',
+        r'\b\d{1,2}:\d{2}\b',
     ]
     for pattern in numeric_patterns:
         match = re.search(pattern, raw_title, re.IGNORECASE)
@@ -449,9 +449,7 @@ def build_deportes_a(title, description, image_data, section_label, logo_data) -
             filter: brightness(0) invert(1);
           }}
 
-          .depa .accent-bar-center {
-    display: none;
-    }
+
         </style>
       </head>
       <body>
