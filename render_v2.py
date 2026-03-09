@@ -1,4 +1,4 @@
-RENDER_VERSION = "GA-V2-CLEAN-18"
+RENDER_VERSION = "GA-V2-CLEAN-19"
 
 from rules_v2 import show_description
 
@@ -449,11 +449,9 @@ def build_deportes_a(title, description, image_data, section_label, logo_data) -
             filter: brightness(0) invert(1);
           }}
 
-          .depa .accent-bar-center {{
-            width: 190px;
-            height: 8px;
-            background: rgba(255,255,255,.6);
-          }}
+          .depa .accent-bar-center {
+    display: none;
+    }
         </style>
       </head>
       <body>
@@ -464,7 +462,6 @@ def build_deportes_a(title, description, image_data, section_label, logo_data) -
             <h1 class="title">{title_html}</h1>
           </div>
           <div class="brand-wrap-center">{logo_html(logo_data)}</div>
-          <div class="accent-bar-center"></div>
         </div>
       </body>
     </html>
